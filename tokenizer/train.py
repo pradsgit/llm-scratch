@@ -241,6 +241,4 @@ if __name__ == "__main__":
         500,
         ["<|endoftext|>"]
     )
-
-
     print(vocab)
