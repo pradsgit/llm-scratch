@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.env
+
+# Data files (usually too large)
+tokenizer/data
+data/*.txt
+data/*.bin
+*.pkl
+*.pth
+
+# But track small example data
+!data/example_*.txt
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb_checkpoints
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+tokenizer/vocab.json
+tokenizer/merges.txt
+checkpoints/
+logs/
