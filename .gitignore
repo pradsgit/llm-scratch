@@ -8,6 +8,11 @@ env/
 venv/
 .env
 
+# Python packaging
+*.egg-info/
+*.egg-info
+*.egg
+
 # Data files (usually too large)
 tokenizer/data
 data/*.txt

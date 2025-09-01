@@ -1,0 +1,29 @@
+[project]
+name = "llm-from-scratch"
+version = "0.1.0"
+description = "Building a Large Language Model from scratch: tokenizer, model, optimizer and training"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+    {name = "Pradeep Muniganti", email = "pradeepmuni10@gmail.com"},
+]
+keywords = ["llm", "transformer", "tokenizer", "bpe", "gpt", "machine-learning", "pytorch"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Text Processing :: Linguistic",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "datasets==3.6.0",
+    "regex>=2025.8.29",
+    "tqdm>=4.67.1",
+]
