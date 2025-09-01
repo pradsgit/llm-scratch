@@ -509,7 +509,7 @@ def save_bpe_tokenizer(
 if __name__ == "__main__":
 
     # filename = './data/openwebtext_hf.txt'
-    filename = './data/tinystories-valid.txt'
+    filename = '../../data/tinystories-valid.txt'
     vocab_size = 500
     special_tokens = ["<|endoftext|>"]
 
@@ -525,7 +525,7 @@ if __name__ == "__main__":
 
     print(list(vocab.items())[:20])
 
-    save_bpe_tokenizer(vocab, merges, vocab_size, special_tokens, './tokenizer/tiny-stories')
+    save_bpe_tokenizer(vocab, merges, vocab_size, special_tokens, '../../artifacts/tokenizer')
 
 
 
