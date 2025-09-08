@@ -1,6 +1,6 @@
 {
   "model_type": "BPE",
-  "vocab_size": 16000,
+  "vocab_size": 1000,
   "merges_file": "merges.txt",
   "vocab_file": "vocab.json",
   "special_tokens": [

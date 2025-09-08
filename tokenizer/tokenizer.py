@@ -1,6 +1,7 @@
 # BPE tokenizer class file
 import regex as re
 from train import train_bpe
+from typing import Iterable, Iterator
 
 GPT2_SPLIT_PATTERN = r"""'(?:[sdmt]|ll|ve|re)| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
 
@@ -157,6 +158,46 @@ class Tokenizer:
 
         return all_tokens
     
+    def encode_iterable(self, iterable: Iterable[str]) -> Iterator[list[int]]:
+        buffer = ""
+        
+        # Check if it's a file handle - use chunk reading
+        if hasattr(iterable, 'read'):
+            chunk_size = 10 * 1024 * 1024  # 10MB chunks
+            
+            while True:
+                chunk = iterable.read(chunk_size)
+                if not chunk:
+                    break
+                    
+                buffer += chunk
+                
+                # Process complete documents
+                while '<|endoftext|>' in buffer:
+                    end_pos = buffer.find('<|endoftext|>') + len('<|endoftext|>')
+                    document = buffer[:end_pos]
+                    tokens = self.encode(document)
+                    yield tokens
+                    buffer = buffer[end_pos:]
+                    
+        else:
+            # Handle other iterables (lists, generators, etc.)
+            for item in iterable:
+                buffer += item
+                
+                while '<|endoftext|>' in buffer:
+                    end_pos = buffer.find('<|endoftext|>') + len('<|endoftext|>')
+                    document = buffer[:end_pos]
+                    tokens = self.encode(document)
+                    yield tokens
+                    buffer = buffer[end_pos:]
+        
+        # Handle any remaining text
+        if buffer.strip():
+            tokens = self.encode(buffer)
+            yield tokens
+                
+    
     @classmethod
     def from_files(cls, vocab_filepath: str, merges_filepath: str, special_tokens=None):
         """
@@ -219,23 +260,30 @@ if __name__ == "__main__":
     vocab_path = '../artifacts/tokenizer/vocab.json'
     merges_path = '../artifacts/tokenizer/merges.txt'
 
-    tokenizer = Tokenizer.from_files(vocab_filepath=vocab_path, merges_filepath=merges_path)
-    print(tokenizer.vocab)
+    # tokenizer = Tokenizer.from_files(vocab_filepath=vocab_path, merges_filepath=merges_path)
+    # print(tokenizer.vocab)
 
-    # vocab, merges = train_bpe(
-    #     '../data/tinystories-valid.txt',
-    #     vocab_size,
-    #     special_tokens,
-    # )
+    vocab, merges = train_bpe(
+        '../data/tinystories-valid.txt',
+        vocab_size,
+        special_tokens,
+    )
     # print(vocab)
+    merges = [(vocab[int(pair[0])], vocab[int(pair[1])]) for pair, token in merges.items()]
 
-    # merges = [(vocab[int(pair[0])], vocab[int(pair[1])]) for pair, token in merges.items()]
+    tokenizer = Tokenizer(vocab, merges)
 
-    text = """"Sleep well, my loves. I'll wake you up when we get home," mom said. But the man did not stop. He pulled harder and harder. At last, the bow broke. The man was not happy. The town was sad. They lost their best bow.
-<|endoftext|>"""
+    with open('../data/tinystories-valid.txt', 'r', encoding='utf8') as f:
+        for token in tokenizer.encode_iterable(f):
+            print(token)
+            break
 
-    ids = tokenizer.encode(text)
+
+#     text = """"Sleep well, my loves. I'll wake you up when we get home," mom said. But the man did not stop. He pulled harder and harder. At last, the bow broke. The man was not happy. The town was sad. They lost their best bow.
+# <|endoftext|>"""
+
+    # ids = tokenizer.encode(text)
     # print(ids)
-    decoded = tokenizer.decode(ids)
+    # decoded = tokenizer.decode(ids)
     # print(decoded)
-    assert text == decoded, "Failed"
+    # assert text == decoded, "Failed"
