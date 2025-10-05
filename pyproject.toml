@@ -25,5 +25,6 @@ classifiers = [
 dependencies = [
     "datasets==3.6.0",
     "regex>=2025.8.29",
+    "torch>=2.8.0",
     "tqdm>=4.67.1",
 ]
